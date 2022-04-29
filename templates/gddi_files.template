@@ -1,0 +1,13 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+set ngddi=`grep -i '^ \$GDDI' $SCR/$JOB.F05 | grep -iv 'NGROUP=0 ' | wc -l`
+if ($ngddi > 0) then
+   set GDDIjob=true
+   echo "This is a GDDI run, keeping various output files on local disks"
+   set echo
+   setenv  OUTPUT $SCR/$JOB.F06
+   setenv   PUNCH $SCR/$JOB.F07
+   unset echo
+else
+   set GDDIjob=false
+endif
+{% endif %}

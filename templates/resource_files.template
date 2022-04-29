@@ -1,0 +1,7 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+source $GMSPATH/gms-files.csh
+if (-e $HOME/.gmsrc) then
+   echo "reading your own $HOME/.gmsrc"
+   source $HOME/.gmsrc
+endif
+{% endif %}

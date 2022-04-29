@@ -1,0 +1,7 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+{% if context["rungms"]["pwd"] %}
+set GMSPATH=`pwd`
+{% else %}
+set GMSPATH={{context["install.info"]["build_path"]}}
+{% endif %}
+{% endif %}

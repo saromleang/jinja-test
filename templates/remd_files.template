@@ -1,0 +1,33 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+set runmd=`grep -i runtyp=md $SCR/$JOB.F05 | wc -l`
+set mremd=`grep -i mremd= $SCR/$JOB.F05 | grep -iv 'mremd=0 ' | wc -l`
+if (($mremd > 0) && ($runmd > 0) && ($ngddi > 0)) then
+   set GDDIjob=false
+   set REMDjob=true
+   echo "This is a REMD run, keeping various output files on local disks"
+   set echo
+   setenv TRAJECT     $SCR/$JOB.F04
+   setenv RESTART $USERSCR/$JOB.rst
+   setenv    REMD $USERSCR/$JOB.remd
+   unset echo
+   set GDDIinp=(`grep -i '^ \$GDDI' $JOB.inp`)
+   set numkwd=$#GDDIinp
+   @ g = 2
+   @ gmax = $numkwd - 1
+   while ($g <= $gmax)
+      set keypair=$GDDIinp[$g]
+      set keyword=`echo $keypair | awk '{split($1,a,"="); print a[1]}'`
+      if (($keyword == ngroup) || ($keyword == NGROUP)) then
+         set nREMDreplica=`echo $keypair | awk '{split($1,a,"="); print a[2]}'`
+         @ g = $gmax
+      endif
+      @ g++
+   end
+   unset g
+   unset gmax
+   unset keypair
+   unset keyword
+else
+   set REMDjob=false
+endif
+{% endif %}

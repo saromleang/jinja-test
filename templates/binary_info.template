@@ -1,0 +1,21 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+echo The execution path is
+echo $path
+echo " "
+echo The library path is
+echo $LD_LIBRARY_PATH
+echo " "
+echo The dynamically linked libraries for this binary are
+echo $GMSPATH/gamess.$VERNO.x:
+echo " "
+ldd $GMSPATH/gamess.$VERNO.x
+echo " "
+if ((-x $GMSPATH/gamess.$VERNO.x) && (-x $GMSPATH/ddikick.x)) then
+else
+   echo "The GAMESS executable gamess.$VERNO.x" >> /dev/stderr
+   echo "or else the DDIKICK executable ddikick.x" >> /dev/stderr
+   echo "could not be found in directory $GMSPATH," >> /dev/stderr
+   echo "or else they did not properly link to executable permission." >> /dev/stderr
+   exit 8
+endif
+{% endif %}

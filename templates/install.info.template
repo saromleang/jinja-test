@@ -1,0 +1,8 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+if ( -e $GMSPATH/install.info ) then
+   source $GMSPATH/install.info
+else
+   echo "Please run 'config' first, to set up GAMESS compiling information" >> /dev/stderr
+   exit 4
+endif
+{% endif%}

@@ -1,0 +1,12 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+if ($GDDIjob == true) then
+   @ n=2   # master in master group already did 'cp' above
+   while ($n <= $NNODES)
+      set host=$HOSTLIST[$n]
+      set host=`echo $host | cut -f 1 -d :` # drop anything behind a colon
+      echo $DDI_RCP $SCR/$JOB.F05 ${host}:$SCR/$JOB.F05
+           $DDI_RCP $SCR/$JOB.F05 ${host}:$SCR/$JOB.F05
+      @ n++
+   end
+endif
+{% endif %}

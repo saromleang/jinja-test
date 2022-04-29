@@ -1,0 +1,4 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+set TARGET={{context["rungms"]["target"]}}
+set primary_node=`hostname`
+{% endif %}

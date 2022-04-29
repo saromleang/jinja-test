@@ -1,0 +1,30 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+set JOB=`basename $INPUT`
+#
+if ($JOB:r.inp == $JOB) then
+  set JOB=$JOB:r
+  set nonomatch
+  foreach file ("$SCR/$JOB."*)
+     if (-f "$file" && -w "$file") rm -v "$file"
+  end
+  unset nonomatch
+  unset file
+endif
+#
+echo "Copying input file $JOB.inp to your run's scratch directory..."
+#
+if (-e $INPUT) then
+   cp  $INPUT  $SCR/$JOB.F05
+else
+   if (-e $GMSPATH/tests/travis-ci/$JOB.inp) then
+      cp  $GMSPATH/tests/travis-ci/$JOB.inp  $SCR/$JOB.F05
+   else if (-e $GMSPATH/tests/travis-ci/parallel/$JOB.inp) then
+      cp  $GMSPATH/tests/travis-ci/parallel/$JOB.inp  $SCR/$JOB.F05
+   else
+      echo "Input file $JOB.inp does not exist." >> /dev/stderr
+      echo "This job expected the input file to be in directory `pwd`" >> /dev/stderr
+      echo "Please fix your file name problem, and resubmit." >> /dev/stderr
+      exit 4
+   endif
+endif
+{% endif %}

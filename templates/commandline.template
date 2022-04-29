@@ -1,0 +1,7 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+set INPUT=$1
+set VERNO=$2
+set NCPUS=$3
+set CPUS_PER_NODE=$4
+set LOGN=$5
+{% endif %}

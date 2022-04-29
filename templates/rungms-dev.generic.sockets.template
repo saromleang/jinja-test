@@ -1,0 +1,178 @@
+{% extends "base.rungms-dev.template" %}
+
+{% block script_header %}
+{% endblock %}
+
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+
+{% block variables %}
+limit stacksize 131072
+{% if context["install.info"]["mathlib"] == "mkl" %}
+setenv MKL_SERIAL YES
+setenv MKL_NUM_THREADS 1
+{% endif %}
+{% endblock %}
+
+{% block ld_library_path %}
+if (! $?LD_LIBRARY_PATH ) setenv LD_LIBRARY_PATH
+# Math Library (optional for soft-linking cases)
+if (-d $GMS_MATHLIB_PATH) setenv LD_LIBRARY_PATH ${GMS_MATHLIB_PATH}:${LD_LIBRARY_PATH}
+{% endblock %}
+
+{% block path %}
+{% endblock %}
+
+{% block scheduler %}
+echo "COBALT has assigned the following compute nodes to this run:"
+uniq $COBALT_NODEFILE
+{% endblock %}
+
+{% block local_scratch %}
+if ( -d /scratch ) then
+   set SCR=/scratch
+else if ( -d /local ) then
+   if ( -d /local/$USER ) then
+      set SCR=/local/$USER
+   else
+      set SCR=/local
+   endif
+else
+   set SCR=`pwd`/scratch
+endif
+if (! -d $SCR) srun mkdir -p $SCR
+{% endblock %}
+
+{% block user_scratch %}
+if (! $?USERSCR ) then
+   set USERSCR=$HOME/restart
+endif
+if (! -d $USERSCR) mkdir -p $USERSCR
+{% endblock %}
+
+{% block prerun %}
+set PPN=$CPUS_PER_NODE
+if (null$PPN == null) set PPN=$NCPUS
+@ NPROCS = $NCPUS + $NCPUS
+#
+setenv HOSTFILE $SCR/$JOB.nodes.mpd
+if (-f "$HOSTFILE" && -w "$HOSTFILE") rm "$HOSTFILE"
+touch $HOSTFILE
+#
+uniq $COBALT_NODEFILE > $HOSTFILE
+set NNODES=`wc -l $HOSTFILE`
+set NNODES=$NNODES[1]
+#
+echo "#########################################################################"
+echo HOSTFILE $HOSTFILE contains
+cat $HOSTFILE
+echo "#########################################################################"
+#
+if ($NNODES > 1) then
+   set NCPUS=$SCR/$JOB.nodes.cpus
+   touch $NCPUS
+   uniq -c $COBALT_NODEFILE > $NCPUS
+endif
+#
+if (-e $NCPUS) then
+   set HOSTLIST=()
+   @ CPU=1
+   set ncores=0
+   while ($CPU <= $NNODES)
+      set node=`sed -n -e "$CPU p" <$NCPUS`
+      set c=`echo $node | awk '{ print $1 }'`
+      set n=`echo $node | awk '{ print $2 }'`
+      set HOSTLIST=($HOSTLIST ${n}:cpus=$c)
+      @ CPU++
+      @ ncores += $c
+   end
+   echo Using $NNODES nodes and $ncores cores from $NCPUS.
+   set NCPUS=$ncores
+   goto skipsetup
+endif
+#
+if ($NCPUS == 1) then
+   set NNODES=1
+   set HOSTLIST=(`hostname`)
+endif
+#
+if ($NCPUS > 1) then
+   switch ( `hostname` )
+      default:
+         echo " "
+         echo Assuming a single but multicore node.
+         if($LOGN == 0) then
+            set NNODES=1
+            set HOSTLIST=(`hostname`:cpus=$NCPUS)
+         else
+            @ NNODES = $NCPUS / $LOGN
+            echo Splitting it into $NNODES logical nodes with $LOGN cores each.
+            set HOSTLIST=()
+            set i=1
+            while ($i <= $NNODES)
+               set HOSTLIST=($HOSTLIST `hostname`:cpus=$LOGN)
+               @ i++
+            end
+         endif
+         echo " "
+   endsw
+endif
+#
+skipsetup:
+echo "#########################################################################"
+echo HOSTLIST contains
+echo $HOSTLIST
+echo "#########################################################################"
+{% endblock %}
+
+{% block launch %}
+set echo
+$GMSPATH/ddikick.x $GMSPATH/gamess.$VERNO.x $JOB \
+    -ddi $NNODES $NCPUS $HOSTLIST \
+    -scr $SCR < /dev/null
+unset echo
+{% endblock %}
+
+{% block accounting_info %}
+{% raw %}
+set nmax=${#HOSTLIST}
+{% endraw %}
+set lasthost=$HOSTLIST[1]
+@ n=2
+while ($n <= $nmax)
+   set host=$HOSTLIST[$n]
+   set host=`echo $host | cut -f 1 -d :`
+   if ($host != $lasthost) then
+      echo Files from $host are:
+      $DDI_RSH $host -l $USER -n "ls -l $SCR/$JOB.*"
+      set lasthost=$host
+   endif
+   @ n++
+end
+{% endblock %}
+
+{% block postrun %}
+set nonomatch
+foreach file ("$SCR/$JOB.F"*)
+   if (-f "$file" && -w "$file") rm "$file"
+end
+unset nonomatch
+unset file
+#
+{% raw %}
+set nmax=${#HOSTLIST}
+{% endraw %}
+set lasthost=$HOSTLIST[1]
+@ n=2
+while ($n <= $nmax)
+   set host=$HOSTLIST[$n]
+   set host=`echo $host | cut -f 1 -d :`
+   if ($host != $lasthost) then
+      echo Files from $host are:
+      $DDI_RSH $host -l $USER -n "find '$SCR' -maxdepth 1 -type f -writable -name '$JOB.F*' -exec rm {} \;"
+      set lasthost=$host
+   endif
+   @ n++
+end
+{% endblock %}
+
+{% endif %}

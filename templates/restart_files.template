@@ -1,0 +1,16 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+if (-f "$CASINO"  && -w "$CASINO")  echo "rm $CASINO"  && rm "$CASINO"
+if (-f "$CIMDMN"  && -w "$CIMDMN")  echo "rm $CIMDMN"  && rm "$CIMDMN"
+if (-f "$CIMFILE" && -w "$CIMFILE") echo "rm $CIMFILE" && rm "$CIMFILE"
+if (-f "$COSDATA" && -w "$COSDATA") echo "rm $COSDATA" && rm "$COSDATA"
+if (-f "$COSPOT"  && -w "$COSPOT")  echo "rm $COSPOT"  && rm "$COSPOT"
+if (-f "$GAMMA"   && -w "$GAMMA")   echo "rm $GAMMA"   && rm "$GAMMA"
+if (-f "$MAKEFP"  && -w "$MAKEFP")  echo "rm $MAKEFP"  && rm "$MAKEFP"
+if (-f "$MDDIP"   && -w "$MDDIP")   echo "rm $MDDIP"   && rm "$MDDIP"
+if (-f "$OPTHES1" && -w "$OPTHES1") echo "rm $OPTHES1" && rm "$OPTHES1"
+if (-f "$OPTHES2" && -w "$OPTHES2") echo "rm $OPTHES2" && rm "$OPTHES2"
+if (-f "$PUNCH"   && -w "$PUNCH")   echo "rm $PUNCH"   && rm "$PUNCH"
+if (-f "$QMWAVE"  && -w "$QMWAVE")  echo "rm $QMWAVE"  && rm "$QMWAVE"
+if (-f "$RESTART" && -w "$RESTART") echo "rm $RESTART" && rm "$RESTART"
+if (-f "$TRAJECT" && -w "$TRAJECT") echo "rm $TRAJECT" && rm "$TRAJECT"
+{% endif %}

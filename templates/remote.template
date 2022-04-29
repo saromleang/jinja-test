@@ -1,0 +1,4 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+setenv DDI_RSH ssh
+setenv DDI_RCP scp
+{% endif %}

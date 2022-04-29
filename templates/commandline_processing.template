@@ -1,0 +1,12 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+if ($INPUT:r.inp != $INPUT) set INPUT=$1.inp
+if (null$VERNO == null) set VERNO=00
+if (null$NCPUS == null) set NCPUS=1
+if (null$CPUS_PER_NODE == null) then
+   set NNODES=1
+else
+   set CPUS_PER_NODE = $4
+   @ NNODES = $NCPUS / $CPUS_PER_NODE
+endif
+if (null$LOGN == null)  set LOGN=0
+{% endif %}

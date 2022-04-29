@@ -1,0 +1,7 @@
+{% if context["rungms"]["system_target"] == "generic" %}
+    {% if context["rungms"]["target"] == "sockets" %}
+        {% include "rungms-dev.generic.sockets.template" %}
+    {% elif context["rungms"]["target"] == "mpi" %}
+        {% include "rungms-dev.generic.mpi.template" %}
+    {% endif %}
+{% endif %}

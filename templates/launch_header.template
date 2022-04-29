@@ -1,0 +1,14 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+echo "----- GAMESS execution script 'rungms-dev' -----"
+echo "Input file      : $INPUT"
+echo "GAMESS Binary   : $VERNO"
+echo "Number of CPUS  : $NCPUS"
+echo "Number of nodes : $NNODES"
+echo "Logical nodes   : $LOGN"
+echo This job is running on host $primary_node
+echo under operating system `uname` at `date` with $TARGET communication mode
+echo "Available scratch disk space (Kbyte units) at beginning of the job is"
+df -k $SCR
+echo "GAMESS temporary binary files will be written to $SCR"
+echo "GAMESS supplementary output files will be written to $USERSCR"
+{% endif %}

@@ -1,0 +1,3 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+if ( -f $GMSPATH/bin/my_ipcrm ) $GMSPATH/bin/my_ipcrm
+{% endif %}

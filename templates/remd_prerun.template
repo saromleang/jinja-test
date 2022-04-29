@@ -1,0 +1,6 @@
+{% if ((context["rungms"]["shell"] == "csh") or (context["rungms"]["shell"] == "tcsh")) %}
+if ($REMDjob == true) then
+   source $GMSPATH/tools/remd.csh $TARGET $nREMDreplica
+   if ($status > 0) exit $status
+endif
+{% endif %}
