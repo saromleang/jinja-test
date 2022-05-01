@@ -1,4 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
+import json
 
 context={
     "install.info": {
@@ -46,7 +47,8 @@ context={
         "include_remd": True,
         "include_myipcrm": True,
         "include_binary_info": True,
-        "include_launch_header": True
+        "include_launch_header": True,
+        "comment_gmsfiles" : True
     }
 }
 
@@ -61,4 +63,21 @@ filename = "rungms-dev.csh"
 with open(filename, 'w') as f:
     rungms_dev = TEMPLATE_ENVIRONMENT.get_template("rungms-dev.template").render(context=context)
     f.write(rungms_dev)
+    f.write("\n")
+
+filename = open("gms-files.json")
+gms_json = json.load(filename)
+
+if ((context["rungms"]["shell"] == "tcsh") or (context["rungms"]["shell"] == "csh")):
+    filename = "gms-files.csh"
+elif ((context["rungms"]["shell"] == "bash") or (context["rungms"]["shell"] == "dash")):
+    filename = "gms-files.sh"
+elif (context["rungms"]["shell"] == "zsh"):
+    filename = "gms-files.zsh"
+else:
+    print("Undefined shell")
+
+with open(filename, 'w') as f:
+    gms_files = TEMPLATE_ENVIRONMENT.get_template("gms-files.template").render(context=context, gms_json=gms_json)
+    f.write(gms_files)
     f.write("\n")

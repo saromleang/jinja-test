@@ -1,0 +1,144 @@
+{% extends "base.gms-files.template" %}
+
+{% block uncategorized %}
+set echo
+{% for key, value in gms_json["uncategorized"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block rimp2 %}
+set echo
+{% for key, value in gms_json["rimp2"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block space_spin_density %}
+set echo
+{% for key, value in gms_json["space-spin density"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block space_no_migration_density %}
+set echo
+{% for key, value in gms_json["space-no-migration density"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block gmcqdpt %}
+set echo
+{% for key, value in gms_json["gmcqdpt"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block coupled_cluster %}
+set cctyp=`grep -i 'CCTYP[(=]' $SCR/$JOB.F05 | wc -l`
+if ($cctyp > 0) set echo
+{% for key, value in gms_json["coupled-cluster"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block elongation %}
+set elgtyp = `grep -i NELONG= $SCR/$JOB.F05 | wc -l`
+if ($elgtyp > 0) then
+   set ELGNAME=$4
+   if (null$4 == null) set ELGNAME=ELGFILE
+   set echo
+   {% for key, value in gms_json["elongation"].items() %}
+   setenv {{'%10s'|format(key)}} {{value}}
+   {% endfor %}
+   unset echo
+endif
+{% endblock %}
+
+{% block extended_tdhf %}
+set txtyp=`grep -i RUNTYP=TDHFX $SCR/$JOB.F05 | wc -l`
+if ($txtyp > 0) set echo
+{% for key, value in gms_json["extended-tdhf"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block divide_and_conquer %}
+set echo
+{% for key, value in gms_json["divide-and-conquer"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block lmo_hyperpolarizability_analysis %}
+set echo
+{% for key, value in gms_json["lmo-hyperpolarizability-analysis"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block vb2000 %}
+set echo
+{% for key, value in gms_json["vb2000"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block efmo %}
+set efmo = `grep -i IEFMO= $SCR/$JOB.F05 | wc -l`
+if ($efmo > 0) then
+   set echo
+   {% for key, value in gms_json["efmo"].items() %}
+   setenv {{'%10s'|format(key)}} {{value}}
+   {% endfor %}
+   unset echo
+endif
+{% endblock %}
+
+{% block explicitly_correlated %}
+#    Next files are used for explicitly correlated methods
+set pt2r12=`egrep -i '(PT212=.TRUE.|PT2R12=.T.)' $SCR/$JOB.F05 | wc -l`
+if ($pt2r12 > 0) then
+   set interface=`egrep -i  '(RUNR12=.T.|RUNTYP=.TRUE.|SINGLS=.T.|SINGLES=.TRUE)' $SCR/$JOB.F05 | wc -l`
+   if ($interface > 0) then
+   set echo
+   {% for key, value in gms_json["explicitly-correlated"]["interface"].items() %}
+   setenv {{'%10s'|format(key)}} {{value}}
+   {% endfor %}
+   unset echo
+   else
+   set echo
+   {% for key, value in gms_json["explicitly-correlated"]["no-interface"].items() %}
+   setenv {{'%10s'|format(key)}} {{value}}
+   {% endfor %}
+   unset echo
+   endif
+endif
+{% endblock %}
+
+{% block cluster_in_molecule %}
+set echo
+{% for key, value in gms_json["cluster-in-molecule"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}
+
+{% block casino %}
+set echo
+{% for key, value in gms_json["casino"].items() %}
+setenv {{'%10s'|format(key)}} {{value}}
+{% endfor %}
+unset echo
+{% endblock %}

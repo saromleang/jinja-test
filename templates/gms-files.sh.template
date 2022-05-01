@@ -1,0 +1,31 @@
+{% extends "base.gms-files.template" %}
+{% block uncategorized %}
+{% endblock %}
+{% block rimp2 %}
+{% endblock %}
+{% block space_spin_density %}
+{% endblock %}
+{% block space_no_migration_density %}
+{% endblock %}
+{% block gmcqdpt %}
+{% endblock %}
+{% block coupled_cluster %}
+{% endblock %}
+{% block elongation %}
+{% endblock %}
+{% block extended_tdhf %}
+{% endblock %}
+{% block divide_and_conquer %}
+{% endblock %}
+{% block lmo_hyperpolarizability_analysis %}
+{% endblock %}
+{% block vb2000 %}
+{% endblock %}
+{% block efmo %}
+{% endblock %}
+{% block explicitly_correlated %}
+{% endblock %}
+{% block cluster_in_molecule %}
+{% endblock %}
+{% block casino %}
+{% endblock %}

@@ -1,0 +1,116 @@
+#!/bin/{{context["rungms"]["shell"]}} -f
+{% if context["rungms"]["comment_gmsfiles"] %}
+#  File Assignments
+#
+#  All binary files should be put on a node's local disk ($SCR directory),
+#  for the highest speed access possible.  These .Fxx files are typically
+#  not saved for the next run, but they may be big and/or I/O intensive.
+#
+#  It is convenient to write ASCII output files (PUNCH, RESTART, TRAJECT,
+#  and MAKEFP) to the user's permanent disk, on your file server.  They
+#  are small, written only by the master process, and are useful outputs
+#  for further runs.
+#
+#                        ASCII input files
+#             You must edit a, but will probably skip b+c.
+#  Some data files may be read by a run, each is read only once, so
+#  that storage of one (1) copy on your file server is appropriate.
+#  a) AUXDATA is directory of data sets containing
+#     Note: change only AUXDATA, not ERICFMT,MCPPATH,BASPATH,QUANPOL!
+#        1. a file of Fm(t) data for ERI computations
+#        2. a BASES subdirectory, containing files of some basis sets
+#        3. a MCP subdirectory, containing files of MCP bases and potentials
+#        4. data sets for the Quantum chemistry Polarizable force field
+#        5. a EFP subdirectory, containing standard EFP2 potentials
+#  b) The EXTBAS file contains any user-supplied basis sets.
+#  c) The NUCBAS or POSBAS files are nuclear or positron basis sets,
+#     used by the NEO method.  See NEO's documentation for more details.
+#  d) there are 3 places where you might want to uncomment a 'set echo',
+#     to see all the file definitions (one is just below).
+{% endif %}
+{% block uncategorized %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are for RI-MP2
+{% endif %}
+{% block rimp2 %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are for space-spin 2nd order density
+{% endif %}
+{% block space_spin_density %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are for spatial no-migration 2nd order density
+{% endif %}
+{% block space_no_migration_density %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are for GMCQDPT
+{% endif %}
+{% block gmcqdpt %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are used only during closed shell coupled cluster runs
+{% endif %}
+{% block coupled_cluster %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are used only during elongation method runs
+{% endif %}
+{% block elongation %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are used only during elongation method runs
+{% endif %}
+{% block extended_tdhf %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are used only during divide-and-conquer runs
+{% endif %}
+{% block divide_and_conquer %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are used only during LMO hyperpolarizability analysis
+{% endif %}
+{% block lmo_hyperpolarizability_analysis %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next two values are used only within the VB2000 add-on code
+{% endif %}
+{% block vb2000 %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are used during EFMO runs
+{% endif %}
+{% block efmo %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are used for explicitly correlated methods
+{% endif %}
+{% block explicitly_correlated %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# Next files are used only during CIM runs
+{% endif %}
+{% block cluster_in_molecule %}
+{% endblock %}
+
+{% if context["rungms"]["comment_gmsfiles"] %}
+# CASINO trial wavefunction file
+{% endif %}
+{% block casino %}
+{% endblock %}

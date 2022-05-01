@@ -343,7 +343,6 @@ if ($GDDIjob == true) cp $SCR/$JOB.F07 $USERSCR/$JOB.dat
 echo ----- accounting info -----
 echo Files used on the primary node $primary_node were:
 ls -lF $SCR/$JOB.*
-
 set nmax=${#HOSTLIST}
 set lasthost=$HOSTLIST[1]
 @ n=2
@@ -367,7 +366,6 @@ end
 unset nonomatch
 unset file
 #
-
 set nmax=${#HOSTLIST}
 set lasthost=$HOSTLIST[1]
 @ n=2

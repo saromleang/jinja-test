@@ -1,0 +1,7 @@
+{% if ((context["rungms"]["shell"] == "tcsh") or (context["rungms"]["shell"] == "csh")) %}
+    {% include "gms-files.csh.template" %}
+{% elif ((context["rungms"]["shell"] == "bash") or (context["rungms"]["shell"] == "dash")) %}
+    {% include "gms-files.sh.template" %}
+{% elif (context["rungms"]["shell"] == "zsh") %}
+    {% include "gms-files.zsh.template" %}
+{% endif %}
