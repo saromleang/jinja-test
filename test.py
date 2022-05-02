@@ -1,5 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
 import json
+import sys
 
 context={
     "install.info": {
@@ -75,7 +76,7 @@ elif ((context["rungms"]["shell"] == "bash") or (context["rungms"]["shell"] == "
 elif (context["rungms"]["shell"] == "zsh"):
     filename = "gms-files.zsh"
 else:
-    print("Undefined shell")
+    raise Exception("Undefined shell")
 
 with open(filename, 'w') as f:
     gms_files = TEMPLATE_ENVIRONMENT.get_template("gms-files.template").render(context=context, gms_json=gms_json)
